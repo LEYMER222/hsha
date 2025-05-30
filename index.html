@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Document</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #212529;
+    padding: 20px;
+    text-align: center;
+  }
+  h1 {
+    color: #ff1c1c;
+    margin-bottom: 20px;
+  }
+  #searchInput {
+    padding: 10px;
+    width: 300px;
+    font-size: 16px;
+    margin-right: 8px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-left: -1300px;
+  }
+  #searchBtn {
+    padding: 10px 16px;
+    font-size: 16px;
+    border: none;
+    background-color: #ff1c1c;
+    color: white;
+    border-radius: 8px;
+  }
+  #pokemonGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .card {
+    background: rgb(255, 234, 0);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    width: 150px;
+    transition: transform 0.2s;
+  }
+  .card img {
+    width: 100px;
+    height: 100px;
+  }
+  .name {
+    font-weight: bold;
+    margin-top: 8px;
+  }
+  .type {
+    color: #555;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<img src="img/gif-poke.gif.png" alt="" style="margin-top: -20px;margin-left: -530px;">
+<input type="text" id="searchInput" placeholder="Search Pokémon..." />
+<button id="searchBtn">Найти</button>
+<div id="pokemonGrid"></div>
+
+<script>
+  const pokemons = [
+    { id: 1, name: "Bulbasaur", type: ["Grass", "Poison"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" },
+    { id: 2, name: "Ivysaur", type: ["Grass", "Poison"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png" },
+    { id: 3, name: "Venusaur", type: ["Grass", "Poison"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png" },
+    { id: 4, name: "Charmander", type: ["Fire"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png" },
+    { id: 5, name: "Charmeleon", type: ["Fire"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png" },
+    { id: 6, name: "Charizard", type: ["Fire", "Flying"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" },
+    { id: 7, name: "Squirtle", type: ["Water"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png" },
+    { id: 8, name: "Wartortle", type: ["Water"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png" },
+    { id: 9, name: "Blastoise", type: ["Water"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png" },
+    { id: 10, name: "Caterpie", type: ["Bug"], image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10.png" },
+  ];
+
+  // Добавим остальных заглушками
+  for(let i=11; i<=151; i++) {
+    pokemons.push({
+      id: i,
+      name: "Pokemon " + i,
+      type: ["Unknown"],
+      image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png`
+    });
+  }
+
+  const grid = document.getElementById("pokemonGrid");
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+
+  function renderPokemons(pokemonList) {
+    grid.innerHTML = "";
+    pokemonList.forEach(pokemon => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.name = pokemon.name.toLowerCase();
+      card.innerHTML = `
+        <img src="${pokemon.image}" alt="${pokemon.name}">
+        <div class="name">${pokemon.name}</div>
+        <div class="type">${pokemon.type.join(", ")}</div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  // Изначально показываем всех
+  renderPokemons(pokemons);
+
+  searchBtn.addEventListener("click", () => {
+    const query = searchInput.value.toLowerCase().trim();
+    if(!query) {
+      // Если пустой запрос — показываем всех
+      renderPokemons(pokemons);
+      return;
+    }
+    // Фильтруем по имени покемона
+    const filtered = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(query));
+    renderPokemons(filtered);
+  });
+</script>
+
+</body>
+</html>
